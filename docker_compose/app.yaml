@@ -1,0 +1,23 @@
+services:
+  app:
+    build:
+      context: ../../FastAPI-simple-boilerplate/
+      dockerfile: Dockerfile
+    container_name: app
+    ports:
+      - "8000:8000"
+    expose:
+      - 8000
+    env_file:
+      - ../.env
+    depends_on:
+      - postgres
+    volumes:
+      - ../../FastAPI-simple-boilerplate:/FastAPI-simple-boilerplate
+    command: ["python", "-Om", "src"]
+    networks:
+      - ppostgres.network
+
+networks:
+  ppostgres.network:
+    driver: bridge
