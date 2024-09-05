@@ -1,20 +1,17 @@
-from fastapi import APIRouter
-from starlette import status
-from starlette.responses import RedirectResponse
-from src.infrastructure.mediator.main import Mediator
-from src.infrastructure.di.main import init_container
-from dataclasses import dataclass
-from punq import Container
 from fastapi import (
+    APIRouter,
     Depends,
     status,
 )
-from src.domain.common.commands.base import BaseCommands
-
+from punq import Container
+from src.infrastructure.di.main import init_container
+from src.infrastructure.mediator.main import Mediator
 from src.presentation.api.controllers.test import (
-    CreateSchemaTest,
     CreateChatCommand,
+    CreateSchemaTest,
 )
+from starlette.responses import RedirectResponse
+
 
 default_router = APIRouter(
     prefix="",
@@ -33,15 +30,17 @@ async def default_redirect() -> RedirectResponse:
 
 @default_router.post(
     "/create_schema",
-    response_model=dict
+    response_model=dict,
 )
 async def create_schemas(
     schema: CreateSchemaTest,
-    container: Container = Depends(init_container)
+    container: Container = Depends(init_container),
 ):
     mediator: Mediator = container.resolve(Mediator)
 
-    schemas, *_ = await mediator.handle_command(CreateChatCommand(name=schema.name, surname=schema.surname))
+    schemas, *_ = await mediator.handle_command(
+        CreateChatCommand(name=schema.name, surname=schema.surname),
+    )
 
     return {
         "message": "Created schemas",

@@ -1,16 +1,12 @@
 import asyncio
 
 from src.infrastructure.config_loader import load_config
-
-
 from src.presentation.api.main import (
     init_api,
     run_api,
 )
 
-from .config import (
-    MConfig,
-)
+from .config import MConfig
 
 
 async def main() -> None:

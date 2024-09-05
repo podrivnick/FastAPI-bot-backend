@@ -1,25 +1,19 @@
+from abc import (
+    ABC,
+    abstractmethod,
+)
 from collections import defaultdict
 from collections.abc import Iterable
 from dataclasses import (
     dataclass,
     field,
 )
-from abc import ABC, abstractmethod
+
 from src.domain.common.commands.base import BaseCommands
-from src.domain.common.events.base import BaseEvent
-from src.infrastructure.exceptions.mediator import (
-    CommandHandlerNotRegisteredException,
-    EventHandlerNotRegisteredException,
-)
 from src.infrastructure.mediator.handlers.commands import (
     CommandHandler,
     CR,
     CT,
-)
-from src.infrastructure.mediator.handlers.event import (
-    ER,
-    ET,
-    EventHandler,
 )
 
 
@@ -41,6 +35,6 @@ class CommandMediator(ABC):
     @abstractmethod
     async def handle_command(
         self,
-        command: BaseCommands
-    )-> Iterable[CR]:
+        command: BaseCommands,
+    ) -> Iterable[CR]:
         raise NotImplementedError()

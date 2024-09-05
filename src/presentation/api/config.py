@@ -3,12 +3,6 @@ from dataclasses import (
     field,
 )
 
-from src.infrastructure.db.config import DBConfig
-from src.infrastructure.di import DiScope
-from src.settings.config import (
-    Config
-)
-
 
 @dataclass
 class APIConfig:

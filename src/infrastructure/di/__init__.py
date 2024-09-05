@@ -1,6 +1,4 @@
 from .const import DiScope
 
 
-__all__ = (
-    "DiScope",
-)
+__all__ = ("DiScope",)

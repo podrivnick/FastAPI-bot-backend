@@ -21,12 +21,8 @@ from src.infrastructure.mediator.handlers.event import (
     ET,
     EventHandler,
 )
-from src.infrastructure.mediator.sub_mediators.commands import (
-    CommandMediator,
-)
-from src.infrastructure.mediator.sub_mediators.event import (
-    EventMediator,
-)
+from src.infrastructure.mediator.sub_mediators.commands import CommandMediator
+from src.infrastructure.mediator.sub_mediators.event import EventMediator
 
 
 @dataclass(eq=False)

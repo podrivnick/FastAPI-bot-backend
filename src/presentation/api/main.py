@@ -2,10 +2,11 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import ORJSONResponse
+from src.presentation.api.controllers import setup_controllers
+from src.presentation.api.middlewares.main import setup_middleware
 
 from .config import APIConfig
-from src.presentation.api.middlewares.main import setup_middleware
-from src.presentation.api.controllers import setup_controllers
+
 
 origins = [
     "*",
