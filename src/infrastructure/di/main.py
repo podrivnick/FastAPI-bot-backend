@@ -1,52 +1,54 @@
-from di import (
-    bind_by_type,
+from functools import lru_cache
+from uuid import uuid4
+
+from punq import (
     Container,
+    Scope,
 )
-from di.api.providers import DependencyProviderType
-from di.api.scopes import Scope
-from di.dependent import Dependent
-from di.executors import AsyncExecutor
-from didiator import (
-    CommandMediator,
-    EventMediator,
-    Mediator,
-    QueryMediator,
+from src.infrastructure.mediator.handlers.event import (
+    EventHandler,
 )
-from didiator.interface.utils.di_builder import DiBuilder
-from didiator.utils.di_builder import DiBuilderImpl
+from src.infrastructure.mediator.main import Mediator
+from src.infrastructure.mediator.sub_mediators.event import EventMediator
+
+from src.settings.config import Config
+from src.infrastructure.mediator.main import Mediator
 
 
-from src.infrastructure.di.const import DiScope
-from src.infrastructure.mediator import get_mediator
+@lru_cache(1)
+def init_container() -> Container:
+    return _initialize_container()
 
 
-def init_di_builder() -> DiBuilder:
-    di_container = Container()
-    di_executor = AsyncExecutor()
-    di_scopes = [DiScope.APP, DiScope.REQUEST]
-    di_builder = DiBuilderImpl(di_container, di_executor, di_scopes=di_scopes)
-    return di_builder
+def _initialize_container() -> Container:
+    container = Container()
 
+    container.register(Config, instance=Config(), scope=Scope.singleton)
 
-def setup_di_builder(di_builder: DiBuilder) -> None:
-    di_builder.bind(
-        bind_by_type(Dependent(lambda *args: di_builder, scope=DiScope.APP), DiBuilder),
-    )
-    setup_mediator_factory(di_builder, get_mediator, DiScope.REQUEST)
+    config: Config = container.resolve(Config)
 
+    # Command handlers
+    container.register(CreateChatCommandHandler)
 
-def setup_mediator_factory(
-    di_builder: DiBuilder,
-    mediator_factory: DependencyProviderType,
-    scope: Scope,
-) -> None:
-    di_builder.bind(bind_by_type(Dependent(mediator_factory, scope=scope), Mediator))
-    di_builder.bind(
-        bind_by_type(Dependent(mediator_factory, scope=scope), QueryMediator),
-    )
-    di_builder.bind(
-        bind_by_type(Dependent(mediator_factory, scope=scope), CommandMediator),
-    )
-    di_builder.bind(
-        bind_by_type(Dependent(mediator_factory, scope=scope), EventMediator),
-    )
+    # Mediator
+    def init_mediator() -> Mediator:
+        mediator = Mediator()
+
+        # command handlers
+        create_chat_handler = CreateChatCommandHandler(
+            _mediator=mediator,
+            chats_repository=container.resolve(BaseChatRepository),
+        )
+
+        # commands
+        mediator.register_command(
+            CreateChatCommand,
+            [create_chat_handler],
+        )
+
+        return mediator
+
+    container.register(Mediator, factory=init_mediator)
+    container.register(EventMediator, factory=init_mediator)
+
+    return container

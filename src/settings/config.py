@@ -1,17 +1,12 @@
-import os
+from pydantic import Field
+from pydantic_settings import BaseSettings
 
-from dotenv import load_dotenv
 
+class Config(BaseSettings):
+    postgres_db: str = Field(alias='POSTGRES_DB')
+    postgres_password: str = Field(alias='POSTGRES_PASSWORD')
+    postgres_user: str = Field(default='postgres', alias='POSTGRES_USER')
+    postgres_host: str = Field(default='postgres', alias='POSTGRES_HOST')
+    postgres_port: int = Field(default=5432, alias='POSTGRES_PORT')
 
-load_dotenv()
-
-POSTGRES_DB = os.environ.get("POSTGRES_DB")
-POSTGRES_USER = os.environ.get("POSTGRES_USER")
-POSTGRES_PASSWORD = os.environ.get("POSTGRES_PASSWORD")
-POSTGRES_HOST = os.environ.get("POSTGRES_HOST")
-POSTGRES_PORT = os.environ.get("POSTGRES_PORT")
-
-DEBUG = os.environ.get("DEBUG")
-
-API_PORT = int(os.environ.get("API_PORT"))
-API_HOST = os.environ.get("API_HOST")
+    debug: bool = Field(default=True, alias='DEBUG')

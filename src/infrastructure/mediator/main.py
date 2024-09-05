@@ -1,17 +1,36 @@
-import logging
-
 from collections import defaultdict
 from collections.abc import Iterable
-from src.infrastructure.mediator.event import EventHandler
-from src.domain.common.events.base import BaseEvent
-from typing import Any
+from dataclasses import (
+    dataclass,
+    field,
+)
+
 from src.domain.common.commands.base import BaseCommands
-from src.infrastructure.mediator.commands import CommandHandler, CT, CR
-from src.infrastructure.exceptions.base import EventHandlerNotRegisteredException, CommandHandlerNotRegisteredException
+from src.domain.common.events.base import BaseEvent
+from src.infrastructure.exceptions.mediator import (
+    CommandHandlerNotRegisteredException,
+    EventHandlerNotRegisteredException,
+)
+from src.infrastructure.mediator.handlers.commands import (
+    CommandHandler,
+    CR,
+    CT,
+)
+from src.infrastructure.mediator.handlers.event import (
+    ER,
+    ET,
+    EventHandler,
+)
+from src.infrastructure.mediator.sub_mediators.commands import (
+    CommandMediator,
+)
+from src.infrastructure.mediator.sub_mediators.event import (
+    EventMediator,
+)
 
 
-@dataclass(frozen=True)
-class Mediator:
+@dataclass(eq=False)
+class Mediator(EventMediator, CommandMediator):
     event_map: dict[ET, EventHandler] = field(
         default_factory=lambda: defaultdict(list),
         kw_only=True,
@@ -21,10 +40,18 @@ class Mediator:
         kw_only=True,
     )
 
-    def register_events(self, event: ET, event_handlers: Iterable[EventHandler[ET, ER]]) -> None:
+    def register_events(
+        self,
+        event: ET,
+        event_handlers: Iterable[EventHandler[ET, ER]],
+    ) -> None:
         self.event_map[event].append(event_handlers)
 
-    def register_command(self, command: CT, command_handlers: Iterable[CommandHandler[CT, CR]]) -> None:
+    def register_command(
+        self,
+        command: CT,
+        command_handlers: Iterable[CommandHandler[CT, CR]],
+    ) -> None:
         self.event_map[command].extend(command_handlers)
 
     async def publish_event(self, events: Iterable[BaseEvent]) -> Iterable[ER]:
@@ -39,7 +66,7 @@ class Mediator:
         for event in events:
             results.extend([await handler.handle(event) for handler in handlers])
 
-        return result
+        return results
 
     async def handle_command(self, command: BaseCommands) -> Iterable[CR]:
         event_type = command.__class__

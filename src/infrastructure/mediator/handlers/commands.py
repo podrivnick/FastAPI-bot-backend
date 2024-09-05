@@ -1,6 +1,15 @@
+from abc import (
+    ABC,
+    abstractmethod,
+)
+from dataclasses import dataclass
+from typing import (
+    Any,
+    Generic,
+    TypeVar,
+)
+
 from src.domain.common.commands.base import BaseCommands
-from abc import ABC, abstractmethod
-from typing import TypeVar, Any, Generic
 
 
 CT = TypeVar("CT", bound=BaseCommands)

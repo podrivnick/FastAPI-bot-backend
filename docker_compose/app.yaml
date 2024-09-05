@@ -1,7 +1,7 @@
 services:
   app:
     build:
-      context: ../../FastAPI-simple-boilerplate/
+      context: ../../FastAPI-bot-backend/
       dockerfile: Dockerfile
     container_name: app
     ports:
@@ -13,7 +13,7 @@ services:
     depends_on:
       - postgres
     volumes:
-      - ../../FastAPI-simple-boilerplate:/FastAPI-simple-boilerplate
+      - ../../FastAPI-bot-backend:/FastAPI-bot-backend
     command: ["python", "-Om", "src"]
     networks:
       - ppostgres.network

@@ -1,16 +1,10 @@
-from src.domain.common.exceptions.base import BaseAppException
 from dataclasses import dataclass
 
+from src.domain.common.exceptions.base import BaseAppException
 
-@dataclass(frozen=True)
-class EventHandlerNotRegisteredException(BaseAppException):
+
+@dataclass(eq=False)
+class BaseMediatorException(BaseAppException):
     @property
     def message(self) -> str:
-        return "Event handler not registered for the given event"
-
-
-@dataclass(frozen=True)
-class CommandHandlerNotRegisteredException(BaseAppException):
-    @property
-    def message(self) -> str:
-        return "Command handler not registered for the given event"
+        return "Error while check request"

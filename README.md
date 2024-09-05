@@ -18,8 +18,8 @@ ___
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/podrivnick/FastAPI-simple-boilerplate.git
-   cd FastAPI-simple-boilerplate
+   git clone https://github.com/podrivnick/FastAPI-bot-backend.git
+   cd FastAPI-bot-backend
    ```
 
 2. Install all required packages in `Requirements` section.
@@ -42,7 +42,7 @@ ___
 ## Structure
 
 ```plaintext
-FastAPI-simple-boilerplate/
+FastAPI-bot-backend/
 ```
 
 ## Technology
