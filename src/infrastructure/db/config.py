@@ -1,15 +1,15 @@
+from abc import ABC
 from dataclasses import dataclass
+
+from motor.core import AgnosticClient
 
 
 @dataclass
-class DBConfig:
-    host: str = "localhost"
-    port: int = 5432
-    database: str = ""
-    user: str = ""
-    password: str = ""
-    echo: bool = True
+class BaseMongoDBRepository(ABC):
+    mongo_db_client: AgnosticClient
+    mongo_db_db_name: str
+    mongo_db_collection: str
 
     @property
-    def full_url(self) -> str:
-        return f"postgresql+asyncpg://{self.user}:{self.password}@{self.host}:{self.port}/{self.database}"
+    def _collection(self) -> str:
+        return self.mongo_db_client[self.mongo_db_db_name][self.mongo_db_collection]
