@@ -15,6 +15,7 @@ from src.presentation.api.controllers.responses.base import (
     ErrorData,
     SuccessResponse,
 )
+from src.presentation.api.providers.stub import Stub
 
 
 router = APIRouter(tags=["Galery"])
@@ -31,7 +32,7 @@ router = APIRouter(tags=["Galery"])
 )
 async def get_random_art_handler(
     schema: GetRandomArtSchema,
-    container: Container = Depends(init_container),
+    container: Container = Depends(Stub(init_container)),
 ) -> SuccessResponse[DTOArt]:
     """Получить случайную картину из введённой категории."""
     mediator: Mediator = container.resolve(Mediator)

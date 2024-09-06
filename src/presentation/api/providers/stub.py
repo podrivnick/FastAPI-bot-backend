@@ -2,7 +2,7 @@ from collections.abc import (
     Callable,
     Hashable,
 )
-from typing import Never
+from typing import Any
 
 
 class Stub:
@@ -13,8 +13,10 @@ class Stub:
         self._dependency = dependency
         self._kwargs = kwargs
 
-    def __call__(self) -> Never:
-        raise NotImplementedError
+    def __call__(self) -> Any:
+        if callable(self._dependency):
+            return self._dependency()  # Вызываем dependency, если это функция
+        return self._dependency  # Или просто возвращаем объект
 
     def __eq__(self, other: object) -> bool:
         if isinstance(other, Stub):
