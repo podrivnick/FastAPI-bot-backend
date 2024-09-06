@@ -15,3 +15,10 @@ class ArtNameTooLongException(BaseArtNameException):
     @property
     def message(self):
         return "Art Name is too long"
+
+
+@dataclass(eq=False)
+class ArtNameIsNotExistException(BaseArtNameException):
+    @property
+    def message(self):
+        return "Art Name is not exist"

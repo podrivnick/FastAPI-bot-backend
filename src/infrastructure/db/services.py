@@ -4,9 +4,11 @@ from abc import (
 )
 from dataclasses import dataclass
 
+from src.domain.arts.entities.art import Art
+
 
 @dataclass
-class BaseMongoDBService(ABC):
+class BaseArtMongoDBService(ABC):
     @abstractmethod
-    async def get_random_art(self) -> None:
+    async def get_random_art(self, art_direction: str) -> Art:
         raise NotImplementedError()
