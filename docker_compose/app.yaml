@@ -11,13 +11,13 @@ services:
     env_file:
       - ../.env
     depends_on:
-      - postgres
+      - mongodb
     volumes:
       - ../../FastAPI-bot-backend:/FastAPI-bot-backend
     command: ["python", "-Om", "src"]
     networks:
-      - ppostgres.network
+      - backend
 
 networks:
-  ppostgres.network:
+  backend:
     driver: bridge
