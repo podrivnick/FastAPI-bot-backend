@@ -7,7 +7,7 @@ from datetime import datetime
 from uuid import uuid4
 
 from src.domain.common.entities import Entity
-from src.domain.common.events.base import Event
+from src.domain.common.events.base import BaseEvent
 
 
 @dataclass
@@ -16,7 +16,7 @@ class AggregateRoot(Entity, ABC):
         default_factory=lambda: str(uuid4()),
         kw_only=True,
     )
-    _events: list[Event] = field(
+    _events: list[BaseEvent] = field(
         default_factory=list,
         init=False,
         repr=False,
@@ -28,16 +28,16 @@ class AggregateRoot(Entity, ABC):
         kw_only=True,
     )
 
-    def record_event(self, event: Event) -> None:
+    def record_event(self, event: BaseEvent) -> None:
         self._events.append(event)
 
-    def get_events(self) -> list[Event]:
+    def get_events(self) -> list[BaseEvent]:
         return self._events
 
     def clear_events(self) -> None:
         self._events.clear()
 
-    def pull_events(self) -> list[Event]:
+    def pull_events(self) -> list[BaseEvent]:
         events = self.get_events().copy()
         self.clear_events()
         return events

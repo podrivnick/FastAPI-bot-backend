@@ -18,7 +18,7 @@ class ArtNameTooLongException(BaseArtNameException):
 
 
 @dataclass(eq=False)
-class ArtNameIsNotExistException(BaseArtNameException):
+class ArtNameIsEmptyException(BaseArtNameException):
     @property
     def message(self):
-        return "Art Name is not exist"
+        return "Art Name can't be empty"

@@ -1,10 +1,7 @@
 from fastapi import (
     APIRouter,
-    Depends,
     status,
 )
-from punq import Container
-
 from starlette.responses import RedirectResponse
 
 

@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from src.domain.arts.exceptions.art import ArtDescriptionIsNotExistException
+from src.domain.arts.exceptions.art_description import ArtDescriptionIsNotExistException
 from src.domain.common.value_objects.base import ValueObject
 
 

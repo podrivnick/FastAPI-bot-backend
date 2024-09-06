@@ -5,6 +5,10 @@ from punq import (
     Container,
     Scope,
 )
+from src.application.arts.commands.arts import (
+    GetRandomArtCommand,
+    GetRandomArtCommandHandler,
+)
 from src.infrastructure.db.mongo import ArtMongoDBService
 from src.infrastructure.db.services import BaseArtMongoDBService
 from src.infrastructure.mediator.main import Mediator
@@ -44,9 +48,28 @@ def _initialize_container() -> Container:
             mongo_db_collection=config.mongodb_arts_collection,
         )
 
-    # Mediator
+    container.register(
+        BaseArtMongoDBService,
+        factory=init_mongodb_arts_service,
+        scope=Scope.singleton,
+    )
+
+    # Handlers
+    container.register(GetRandomArtCommandHandler)
+
     def init_mediator() -> Mediator:
         mediator = Mediator()
+
+        # command handlers
+        get_random_art_handler = GetRandomArtCommandHandler(
+            arts_service=container.resolve(BaseArtMongoDBService),
+        )
+
+        # commands
+        mediator.register_command(
+            GetRandomArtCommand,
+            [get_random_art_handler],
+        )
 
         return mediator
 

@@ -1,35 +1,27 @@
 from dataclasses import dataclass
 
-from domain.values.messages import Title
-from infra.repositories.messages.base import BaseChatsRepository
-from logic.commands.base import (
-    BaseCommand,
-    CommandHandler,
-)
-from logic.exceptions.messages import ChatWithThatTitleAlreadyExistsException
+from src.domain.arts import value_objects as vo
 from src.domain.arts.entities.art import Art
+from src.domain.common.commands.base import BaseCommands
+from src.infrastructure.db.services import BaseArtMongoDBService
+from src.infrastructure.mediator.handlers.commands import CommandHandler
 
 
 @dataclass(frozen=True)
-class GetRandomArtCommand(BaseCommand):
-    title: str
+class GetRandomArtCommand(BaseCommands):
+    art_direction: str
 
 
 @dataclass(frozen=True)
-class GetRandomArtCommandHandler(CommandHandler[Art]):
-    chats_repository: BaseChatsRepository
+class GetRandomArtCommandHandler(CommandHandler[GetRandomArtCommand, Art]):
+    arts_service: BaseArtMongoDBService
 
     async def handle(
         self,
-        command: str,
+        command: GetRandomArtCommand,
     ) -> Art:
-        if await self.chats_repository.check_chat_exists_by_title(command.title):
-            raise ChatWithThatTitleAlreadyExistsException(command.title)
+        art_direction = vo.ArtDirection(command.art_direction)
 
-        title = Title(value=command.title)
-
-        new_chat = Art.create_chat(title=title)
-
-        art = await self.chats_repository.add_chat(new_chat)
+        art = await self.arts_service.get_random_art(art_direction.to_raw())
 
         return art

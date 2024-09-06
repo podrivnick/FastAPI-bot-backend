@@ -11,7 +11,21 @@ class BaseArtDirectionException(ValueError, DomainException):
 
 
 @dataclass(eq=False)
-class ArtDirectionIsNotExistException(BaseArtDirectionException):
+class ArtDirectionIsEmptyException(BaseArtDirectionException):
     @property
     def message(self):
-        return "Art Direction is not exist"
+        return "Art Direction is empty"
+
+
+@dataclass(eq=False)
+class ArtDirectionInCorrectFormatException(BaseArtDirectionException):
+    @property
+    def message(self):
+        return "Art Direction is incorrect format"
+
+
+@dataclass(eq=False)
+class ArtDirectionIsTooLongException(BaseArtDirectionException):
+    @property
+    def message(self):
+        return "Art Direction is too long"

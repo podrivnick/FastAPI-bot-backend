@@ -1,4 +1,4 @@
-from .config import DBConfig
+from .config import BaseMongoDBRepository
 
 
-__all__ = ("DBConfig",)
+__all__ = ("BaseMongoDBRepository",)
