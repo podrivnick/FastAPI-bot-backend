@@ -2,14 +2,17 @@ from dataclasses import dataclass
 
 from src.domain.arts.entities.art import Art
 from src.domain.flowers.entities.flower import Flower
+from src.domain.poems.entities.poem import Poem
 from src.infrastructure.db.config import BaseMongoDBRepository
 from src.infrastructure.db.convertors import (
     convert_art_document_to_entity,
     convert_flower_document_to_entity,
+    convert_poem_document_to_entity,
 )
 from src.infrastructure.db.services import (
     BaseArtMongoDBService,
     BaseFlowerMongoDBService,
+    BasePoemMongoDBService,
 )
 
 
@@ -43,9 +46,30 @@ class FlowerMongoDBService(BaseFlowerMongoDBService, BaseMongoDBRepository):
         cursor = self._collection.aggregate(pipeline)
 
         random_document = await cursor.to_list(length=1)
-        print(random_document)
+
         return (
             convert_flower_document_to_entity(random_document[0])
+            if random_document
+            else None
+        )
+
+
+@dataclass
+class PoemMongoDBService(BasePoemMongoDBService, BaseMongoDBRepository):
+    async def get_random_poem(
+        self,
+        poem_author: str,
+    ) -> Poem:
+        pipeline = [
+            {"$match": {"poem_author": poem_author}},
+            {"$sample": {"size": 1}},
+        ]
+        cursor = self._collection.aggregate(pipeline)
+
+        random_document = await cursor.to_list(length=1)
+
+        return (
+            convert_poem_document_to_entity(random_document[0])
             if random_document
             else None
         )

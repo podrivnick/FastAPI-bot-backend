@@ -6,6 +6,7 @@ from dataclasses import dataclass
 
 from src.domain.arts.entities.art import Art
 from src.domain.flowers.entities.flower import Flower
+from src.domain.poems.entities.poem import Poem
 
 
 @dataclass
@@ -25,5 +26,5 @@ class BaseFlowerMongoDBService(ABC):
 @dataclass
 class BasePoemMongoDBService(ABC):
     @abstractmethod
-    async def get_random_poem(self) -> Flower:
+    async def get_random_poem(self, poem_author: str) -> Poem:
         raise NotImplementedError()

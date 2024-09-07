@@ -9,12 +9,13 @@ from src.application.arts.commands.arts import GetRandomArtCommand
 from src.application.arts.commands.flowers import GetRandomFlowerCommand
 from src.application.arts.dto.art import DTOArt
 from src.application.arts.dto.flower import DTOFlower
-from src.application.arts.dto.poem import DTOPoem
 from src.application.arts.schemas.base import (
     GetRandomArtSchema,
     GetRandomFlowerSchema,
-    GetRandomPoemByCertainAuthorSchema,
 )
+from src.application.poems.commands.poems import GetRandomPoemCommand
+from src.application.poems.dto.poem import DTOPoem
+from src.application.poems.schemas.base import GetRandomPoemByCertainAuthorSchema
 from src.domain.common.exceptions.base import BaseAppException
 from src.infrastructure.di.main import init_container
 from src.infrastructure.mediator.main import Mediator
@@ -104,7 +105,7 @@ async def get_random_poem_handler(
 
     try:
         poem = await mediator.handle_command(
-            GetRandomArtCommand(poem_author=schema.poem_author),
+            GetRandomPoemCommand(poem_author=schema.poem_author),
         )
     except BaseAppException as exception:
         raise HTTPException(
