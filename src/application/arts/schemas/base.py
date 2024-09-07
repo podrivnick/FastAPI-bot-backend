@@ -1,14 +1,6 @@
-from dataclasses import (
-    dataclass,
-    field,
-)
+from dataclasses import dataclass
 
 
 @dataclass(frozen=True)
 class GetRandomArtSchema:
     art_direction: str
-
-
-@dataclass(frozen=True)
-class GetRandomFlowerSchema:
-    get_random_flower_photo: bool | None = field(default=None)

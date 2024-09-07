@@ -9,7 +9,7 @@ from src.application.arts.commands.arts import (
     GetRandomArtCommand,
     GetRandomArtCommandHandler,
 )
-from src.application.arts.commands.flowers import (
+from src.application.flowers.commands.flowers import (
     GetRandomFlowerCommand,
     GetRandomFlowerCommandHandler,
 )

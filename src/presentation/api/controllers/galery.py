@@ -6,13 +6,11 @@ from fastapi.exceptions import HTTPException
 from fastapi.routing import APIRouter
 from punq import Container
 from src.application.arts.commands.arts import GetRandomArtCommand
-from src.application.arts.commands.flowers import GetRandomFlowerCommand
 from src.application.arts.dto.art import DTOArt
-from src.application.arts.dto.flower import DTOFlower
-from src.application.arts.schemas.base import (
-    GetRandomArtSchema,
-    GetRandomFlowerSchema,
-)
+from src.application.arts.schemas.base import GetRandomArtSchema
+from src.application.flowers.commands.flowers import GetRandomFlowerCommand
+from src.application.flowers.dto.flower import DTOFlower
+from src.application.flowers.schemas.base import GetRandomFlowerSchema
 from src.application.poems.commands.poems import GetRandomPoemCommand
 from src.application.poems.dto.poem import DTOPoem
 from src.application.poems.schemas.base import GetRandomPoemByCertainAuthorSchema
