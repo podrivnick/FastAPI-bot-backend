@@ -17,5 +17,9 @@ class Config(BaseSettings):
         default="arts",
         alias="MONGODB_ARTS_COLLECTION",
     )
+    mongodb_flowers_collection: str = Field(
+        default="flowers",
+        alias="MONGODB_FLOWERS_COLLECTION",
+    )
 
     debug: bool = Field(default=True, alias="DEBUG")

@@ -6,8 +6,15 @@ from fastapi.exceptions import HTTPException
 from fastapi.routing import APIRouter
 from punq import Container
 from src.application.arts.commands.arts import GetRandomArtCommand
-from src.application.arts.dto.art import DTOArt
-from src.application.arts.schemas.base import GetRandomArtSchema
+from src.application.arts.commands.flowers import GetRandomFlowerCommand
+from src.application.arts.dto.art import (
+    DTOArt,
+    DTOFlower,
+)
+from src.application.arts.schemas.base import (
+    GetRandomArtSchema,
+    GetRandomFlowerSchema,
+)
 from src.domain.common.exceptions.base import BaseAppException
 from src.infrastructure.di.main import init_container
 from src.infrastructure.mediator.main import Mediator
@@ -48,3 +55,32 @@ async def get_random_art_handler(
         )
 
     return SuccessResponse(result=art)
+
+
+@router.get(
+    "/random_flower",
+    status_code=status.HTTP_201_CREATED,
+    description="Апи для получения случайного фото цветов",
+    responses={
+        status.HTTP_201_CREATED: {"model": DTOFlower},
+        status.HTTP_400_BAD_REQUEST: {"model": ErrorData},
+    },
+)
+async def get_random_flower_handler(
+    schema: GetRandomFlowerSchema = Depends(),
+    container: Container = Depends(Stub(init_container)),
+) -> SuccessResponse[DTOFlower]:
+    """Получить случайное фото цветов."""
+    mediator: Mediator = container.resolve(Mediator)
+
+    try:
+        flower = await mediator.handle_command(
+            GetRandomFlowerCommand(),
+        )
+    except BaseAppException as exception:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={"error": exception.message},
+        )
+
+    return SuccessResponse(result=flower)

@@ -15,7 +15,10 @@ from src.infrastructure.db.services import (
 
 @dataclass
 class ArtMongoDBService(BaseArtMongoDBService, BaseMongoDBRepository):
-    async def get_random_art(self, art_direction: str) -> Art:
+    async def get_random_art(
+        self,
+        art_direction: str,
+    ) -> Art:
         pipeline = [
             {"$match": {"art_direction": art_direction}},
             {"$sample": {"size": 1}},
@@ -36,13 +39,11 @@ class FlowerMongoDBService(BaseFlowerMongoDBService, BaseMongoDBRepository):
     async def get_random_flower(
         self,
     ) -> Flower:
-        pipeline = [
-            {"$sample": {"size": 1}},
-        ]
+        pipeline = [{"$sample": {"size": 1}}]
         cursor = self._collection.aggregate(pipeline)
 
         random_document = await cursor.to_list(length=1)
-
+        print(random_document)
         return (
             convert_flower_document_to_entity(random_document[0])
             if random_document

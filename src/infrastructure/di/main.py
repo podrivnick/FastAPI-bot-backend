@@ -9,13 +9,17 @@ from src.application.arts.commands.arts import (
     GetRandomArtCommand,
     GetRandomArtCommandHandler,
 )
+from src.application.arts.commands.flowers import (
+    GetRandomFlowerCommand,
+    GetRandomFlowerCommandHandler,
+)
 from src.infrastructure.db.mongo import (
     ArtMongoDBService,
     FlowerMongoDBService,
 )
 from src.infrastructure.db.services import (
     BaseArtMongoDBService,
-    BaseMongoDBRepository,
+    BaseFlowerMongoDBService,
 )
 from src.infrastructure.mediator.main import Mediator
 from src.infrastructure.mediator.sub_mediators.event import EventMediator
@@ -54,11 +58,11 @@ def _initialize_container() -> Container:
             mongo_db_collection=config.mongodb_arts_collection,
         )
 
-    def init_mongodb_flowers_service() -> BaseMongoDBRepository:
+    def init_mongodb_flowers_service() -> BaseFlowerMongoDBService:
         return FlowerMongoDBService(
             mongo_db_client=client,
             mongo_db_db_name=config.mongodb_galery_database,
-            mongo_db_collection=config.mongodb_arts_collection,
+            mongo_db_collection=config.mongodb_flowers_collection,
         )
 
     container.register(
@@ -68,13 +72,14 @@ def _initialize_container() -> Container:
     )
 
     container.register(
-        BaseMongoDBRepository,
+        BaseFlowerMongoDBService,
         factory=init_mongodb_flowers_service,
         scope=Scope.singleton,
     )
 
     # Handlers
     container.register(GetRandomArtCommandHandler)
+    container.register(GetRandomFlowerCommandHandler)
 
     def init_mediator() -> Mediator:
         mediator = Mediator()
@@ -84,10 +89,21 @@ def _initialize_container() -> Container:
             arts_service=container.resolve(BaseArtMongoDBService),
         )
 
+        # command handlers
+        get_random_flower_handler = GetRandomFlowerCommandHandler(
+            flowers_service=container.resolve(BaseFlowerMongoDBService),
+        )
+
         # commands
         mediator.register_command(
             GetRandomArtCommand,
             [get_random_art_handler],
+        )
+
+        # commands
+        mediator.register_command(
+            GetRandomFlowerCommand,
+            [get_random_flower_handler],
         )
 
         return mediator

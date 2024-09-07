@@ -10,7 +10,7 @@ MAX_LENGTH_FLOWERS_NAME = 30
 
 
 @dataclass(frozen=True)
-class FlowerName(ValueObject[str, None]):
+class FlowerName(ValueObject[str | None]):
     value: str | None
 
     def validate(
