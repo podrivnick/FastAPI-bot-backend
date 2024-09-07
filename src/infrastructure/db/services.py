@@ -20,3 +20,10 @@ class BaseFlowerMongoDBService(ABC):
     @abstractmethod
     async def get_random_flower(self) -> Flower:
         raise NotImplementedError()
+
+
+@dataclass
+class BasePoemMongoDBService(ABC):
+    @abstractmethod
+    async def get_random_poem(self) -> Flower:
+        raise NotImplementedError()

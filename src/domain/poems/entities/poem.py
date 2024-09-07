@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import Self
 
 from src.domain.common.entities.aggregate_root import AggregateRoot
-from src.domain.flowers import value_objects as vo
+from src.domain.poems import value_objects as vo
 
 
 @dataclass
