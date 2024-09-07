@@ -1,4 +1,4 @@
-# FastAPI Boilerplate With Postgres
+# FastAPI Boilerplate With Mongo
 
 A non-commercial FastAPI boilerplate, that using DI for containerization, didiator for mediators
 ### Installation and Running
@@ -49,7 +49,7 @@ FastAPI-bot-backend/
 + **FastAPI**
 + **Python**
 + **Docker**
-+ **Postgres**
++ **Mongo**
 
 ## Author
 Author of the backend: ***Rybakov Artem***  (https://github.com/podrivnick)

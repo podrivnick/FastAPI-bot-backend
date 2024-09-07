@@ -7,10 +7,8 @@ from fastapi.routing import APIRouter
 from punq import Container
 from src.application.arts.commands.arts import GetRandomArtCommand
 from src.application.arts.commands.flowers import GetRandomFlowerCommand
-from src.application.arts.dto.art import (
-    DTOArt,
-    DTOFlower,
-)
+from src.application.arts.dto.art import DTOArt
+from src.application.arts.dto.flower import DTOFlower
 from src.application.arts.schemas.base import (
     GetRandomArtSchema,
     GetRandomFlowerSchema,
