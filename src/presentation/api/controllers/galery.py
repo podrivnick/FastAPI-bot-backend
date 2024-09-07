@@ -82,3 +82,32 @@ async def get_random_flower_handler(
         )
 
     return SuccessResponse(result=flower)
+
+
+@router.post(
+    "/random_poem",
+    status_code=status.HTTP_201_CREATED,
+    description="Апи для получения случайного стихотворения",
+    responses={
+        status.HTTP_201_CREATED: {"model": DTOArt},
+        status.HTTP_400_BAD_REQUEST: {"model": ErrorData},
+    },
+)
+async def get_random_poem_handler(
+    schema: GetRandomArtSchema,
+    container: Container = Depends(Stub(init_container)),
+) -> SuccessResponse[DTOArt]:
+    """Получить случайное стихотворение полученного автора."""
+    mediator: Mediator = container.resolve(Mediator)
+
+    try:
+        art = await mediator.handle_command(
+            GetRandomArtCommand(art_direction=schema.art_direction),
+        )
+    except BaseAppException as exception:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={"error": exception.message},
+        )
+
+    return SuccessResponse(result=art)

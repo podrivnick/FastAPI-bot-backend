@@ -21,5 +21,9 @@ class Config(BaseSettings):
         default="flowers",
         alias="MONGODB_FLOWERS_COLLECTION",
     )
+    mongodb_poems_collection: str = Field(
+        default="poems",
+        alias="MONGODB_POEMS_COLLECTION",
+    )
 
     debug: bool = Field(default=True, alias="DEBUG")
