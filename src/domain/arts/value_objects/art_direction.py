@@ -10,7 +10,7 @@ from src.domain.common.value_objects.base import ValueObject
 
 
 MAX_ART_DIRECTION_LENGTH = 40
-USERNAME_PATTERN = re.compile(r"[A-Za-z][A-Za-z1-9_]+")
+ART_NAME_PATTERN = re.compile(r"[A-Za-z][A-Za-z1-9_]+")
 
 
 @dataclass(frozen=True)
@@ -24,7 +24,7 @@ class ArtDirection(ValueObject[str | None]):
         if len(self.value) > MAX_ART_DIRECTION_LENGTH:
             raise ArtDirectionIsTooLongException()
 
-        if not USERNAME_PATTERN.match(self.value):
+        if not ART_NAME_PATTERN.match(self.value):
             raise ArtDirectionInCorrectFormatException()
 
     def exists(self) -> bool:

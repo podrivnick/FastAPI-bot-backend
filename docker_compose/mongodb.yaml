@@ -6,6 +6,7 @@ services:
       - '27017:27017'
     volumes:
       - dbdata6:/data/db
+      - ../data:/import
     networks:
       - backend
 
