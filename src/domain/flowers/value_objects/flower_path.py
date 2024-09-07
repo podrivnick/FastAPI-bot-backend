@@ -10,17 +10,17 @@ MAX_LENGTH_FLOWERS_DESCRIPTION = 30
 
 
 @dataclass(frozen=True)
-class FlowerDescription(ValueObject[str, None]):
+class FlowerPath(ValueObject[str, None]):
     value: str | None
 
     def validate(
         self,
     ) -> None:
         if len(self.value) == 0:
-            raise ex.FlowerDescriptionIsEmptyException()
+            raise ex.FlowerPathIsEmptyException()
 
         if len(self.value) > MAX_LENGTH_FLOWERS_DESCRIPTION:
-            raise ex.FlowerDescriptionIsTooLongException()
+            raise ex.FlowerPathIsTooLongException()
 
         if not FLOWER_DESCRIPTION_PATTERN.match(self.value):
-            raise ex.FlowerDescriptionInCorrectFormatException()
+            raise ex.FlowerPathInCorrectFormatException()

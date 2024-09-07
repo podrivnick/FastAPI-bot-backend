@@ -9,8 +9,14 @@ from src.application.arts.commands.arts import (
     GetRandomArtCommand,
     GetRandomArtCommandHandler,
 )
-from src.infrastructure.db.mongo import ArtMongoDBService
-from src.infrastructure.db.services import BaseArtMongoDBService
+from src.infrastructure.db.mongo import (
+    ArtMongoDBService,
+    FlowerMongoDBService,
+)
+from src.infrastructure.db.services import (
+    BaseArtMongoDBService,
+    BaseMongoDBRepository,
+)
 from src.infrastructure.mediator.main import Mediator
 from src.infrastructure.mediator.sub_mediators.event import EventMediator
 from src.settings.config import Config
@@ -48,9 +54,22 @@ def _initialize_container() -> Container:
             mongo_db_collection=config.mongodb_arts_collection,
         )
 
+    def init_mongodb_flowers_service() -> BaseMongoDBRepository:
+        return FlowerMongoDBService(
+            mongo_db_client=client,
+            mongo_db_db_name=config.mongodb_galery_database,
+            mongo_db_collection=config.mongodb_arts_collection,
+        )
+
     container.register(
         BaseArtMongoDBService,
         factory=init_mongodb_arts_service,
+        scope=Scope.singleton,
+    )
+
+    container.register(
+        BaseMongoDBRepository,
+        factory=init_mongodb_flowers_service,
         scope=Scope.singleton,
     )
 

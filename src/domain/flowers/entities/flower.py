@@ -8,17 +8,17 @@ from src.domain.flowers import value_objects as vo
 @dataclass
 class Flower(AggregateRoot):
     flower_name: vo.FlowerName
-    flower_description: vo.FlowerDescription
+    flower_path: vo.FlowerPath
 
     @classmethod
     def create_flower(
         cls,
         flower_name: vo.FlowerName,
-        flower_description: vo.FlowerDescription,
+        flower_path: vo.FlowerPath,
     ) -> Self:
         flower = cls(
             flower_name=flower_name,
-            flower_description=flower_description,
+            flower_path=flower_path,
         )
 
         return flower

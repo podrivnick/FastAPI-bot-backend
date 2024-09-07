@@ -1,7 +1,7 @@
 from .flower_description import (
-    FlowerDescriptionInCorrectFormatException,
-    FlowerDescriptionIsEmptyException,
-    FlowerDescriptionIsTooLongException,
+    FlowerPathInCorrectFormatException,
+    FlowerPathIsEmptyException,
+    FlowerPathIsTooLongException,
 )
 from .flower_name import (
     FlowerNameInCorrectFormatException,
@@ -11,9 +11,9 @@ from .flower_name import (
 
 
 __all__ = (
-    "FlowerDescriptionIsEmptyException",
-    "FlowerDescriptionIsTooLongException",
-    "FlowerDescriptionInCorrectFormatException",
+    "FlowerPathIsEmptyException",
+    "FlowerPathIsTooLongException",
+    "FlowerPathInCorrectFormatException",
     "FlowerNameIsEmptyException",
     "FlowerNameIsTooLongException",
     "FlowerNameInCorrectFormatException",
