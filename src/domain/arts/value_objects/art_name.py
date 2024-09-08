@@ -15,9 +15,6 @@ class ArtName(ValueObject[str | None]):
     value: str | None
 
     def validate(self) -> None:
-        if self.value is None:
-            return
-
         if len(self.value) == 0:
             raise ArtNameIsEmptyException()
 
