@@ -1,5 +1,9 @@
 from functools import lru_cache
+from uuid import uuid4
 
+from aiojobs import Scheduler
+from aiokafka import AIOKafkaConsumer
+from aiokafka.producer import AIOKafkaProducer
 from motor.motor_asyncio import AsyncIOMotorClient
 from punq import (
     Container,
@@ -9,6 +13,7 @@ from src.application.arts.commands.arts import (
     GetRandomArtCommand,
     GetRandomArtCommandHandler,
 )
+from src.application.arts.events.arts import GetRandomArtEventHandler
 from src.application.flowers.commands.flowers import (
     GetRandomFlowerCommand,
     GetRandomFlowerCommandHandler,
@@ -17,6 +22,7 @@ from src.application.poems.commands.poems import (
     GetRandomPoemCommand,
     GetRandomPoemCommandHandler,
 )
+from src.domain.arts.events.arts import GetRandomArtEvent
 from src.infrastructure.db.mongo import (
     ArtMongoDBService,
     FlowerMongoDBService,
@@ -29,6 +35,8 @@ from src.infrastructure.db.services import (
 )
 from src.infrastructure.mediator.main import Mediator
 from src.infrastructure.mediator.sub_mediators.event import EventMediator
+from src.infrastructure.message_broker.base import BaseMessageBroker
+from src.infrastructure.message_broker.kafka import KafkaMessageBroker
 from src.settings.config import Config
 
 
@@ -101,22 +109,54 @@ def _initialize_container() -> Container:
     container.register(GetRandomFlowerCommandHandler)
     container.register(GetRandomPoemCommandHandler)
 
+    # Kafka
+    def create_message_broker() -> BaseMessageBroker:
+        return KafkaMessageBroker(
+            producer=AIOKafkaProducer(bootstrap_servers=config.kafka_url),
+            consumer=AIOKafkaConsumer(
+                bootstrap_servers=config.kafka_url,
+                group_id=f"chats-{uuid4()}",
+                metadata_max_age_ms=30000,
+            ),
+        )
+
+    container.register(
+        BaseMessageBroker,
+        factory=create_message_broker,
+        scope=Scope.singleton,
+    )
+
     def init_mediator() -> Mediator:
         mediator = Mediator()
 
         # command handlers
         get_random_art_handler = GetRandomArtCommandHandler(
+            _mediator=mediator,
             arts_service=container.resolve(BaseArtMongoDBService),
         )
 
         # command handlers
         get_random_flower_handler = GetRandomFlowerCommandHandler(
+            _mediator=mediator,
             flowers_service=container.resolve(BaseFlowerMongoDBService),
         )
 
         # command handlers
         get_random_poem_handler = GetRandomPoemCommandHandler(
+            _mediator=mediator,
             poems_service=container.resolve(BasePoemMongoDBService),
+        )
+
+        # event handlers
+        random_art_handler_event = GetRandomArtEventHandler(
+            broker_topic=config.recieved_random_art,
+            message_broker=container.resolve(BaseMessageBroker),
+        )
+
+        # events
+        mediator.register_event(
+            GetRandomArtEvent,
+            [random_art_handler_event],
         )
 
         # commands
@@ -141,5 +181,7 @@ def _initialize_container() -> Container:
 
     container.register(Mediator, factory=init_mediator)
     container.register(EventMediator, factory=init_mediator)
+
+    container.register(Scheduler, factory=lambda: Scheduler(), scope=Scope.singleton)
 
     return container

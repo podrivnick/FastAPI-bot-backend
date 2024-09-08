@@ -25,5 +25,10 @@ class Config(BaseSettings):
         default="poems",
         alias="MONGODB_POEMS_COLLECTION",
     )
+    kafka_url: str = Field(
+        default="kafka:29092",
+        alias="KAFKA_URL",
+    )
+    recieved_random_art_topic: str = Field(default="recieved_random_art")
 
     debug: bool = Field(default=True, alias="DEBUG")

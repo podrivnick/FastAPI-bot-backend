@@ -18,10 +18,7 @@ class AggregateRoot(Entity, ABC):
     )
     _events: list[BaseEvent] = field(
         default_factory=list,
-        init=False,
-        repr=False,
-        hash=False,
-        compare=False,
+        kw_only=True,
     )
     created_at: datetime = field(
         default_factory=datetime.now,

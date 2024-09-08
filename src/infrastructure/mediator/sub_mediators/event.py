@@ -19,7 +19,7 @@ from src.infrastructure.mediator.handlers.event import (
 
 @dataclass(eq=False)
 class EventMediator(ABC):
-    event_map: dict[ET, EventHandler] = field(
+    events_map: dict[ET, EventHandler] = field(
         default_factory=lambda: defaultdict(list),
         kw_only=True,
     )

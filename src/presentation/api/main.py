@@ -1,8 +1,18 @@
+from contextlib import asynccontextmanager
+
 import uvicorn
+from aiojobs import Scheduler
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import ORJSONResponse
+from punq import Container
+from src.infrastructure.di.main import init_container
 from src.presentation.api.controllers import setup_controllers
+from src.presentation.api.lifespan import (
+    close_message_broker,
+    consume_in_background,
+    init_message_broker,
+)
 from src.presentation.api.middlewares.main import setup_middleware
 
 from .config import APIConfig
@@ -13,6 +23,20 @@ origins = [
 ]
 
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await init_message_broker()
+
+    container: Container = init_container()
+    scheduler: Scheduler = container.resolve(Scheduler)
+
+    job = await scheduler.spawn(consume_in_background())
+
+    yield
+    await close_message_broker()
+    await job.close()
+
+
 def init_api(
     debug: bool = __debug__,
 ) -> FastAPI:
@@ -21,6 +45,7 @@ def init_api(
         title="User service",
         version="1.0.0",
         default_response_class=ORJSONResponse,
+        lifespan=lifespan,
     )
     setup_middleware(app)
 

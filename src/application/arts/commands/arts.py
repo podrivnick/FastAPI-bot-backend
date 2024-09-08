@@ -24,4 +24,6 @@ class GetRandomArtCommandHandler(CommandHandler[GetRandomArtCommand, Art]):
 
         art = await self.arts_service.get_random_art(art_direction.to_raw())
 
+        await self._mediator.publish_event(art.pull_events())
+
         return art
