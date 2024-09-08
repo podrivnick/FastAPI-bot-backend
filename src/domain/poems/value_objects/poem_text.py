@@ -6,7 +6,7 @@ from src.domain.poems import exceptions as ex
 
 
 POEM_TEXT_PATTERN = re.compile(r"(\.\./|/)?([a-zA-Z0-9_\-\.]+/)*[a-zA-Z0-9_\-\.]+")  # noqa DUO138
-MAX_LENGTH_POEM_TEXT = 30
+MAX_LENGTH_POEM_TEXT = 400
 
 
 @dataclass(frozen=True)

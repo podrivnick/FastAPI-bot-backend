@@ -5,8 +5,8 @@ from src.domain.common.value_objects.base import ValueObject
 from src.domain.poems import exceptions as ex
 
 
-POEM_AUTHOR_PATTERN = re.compile(r"(\.\./|/)?([a-zA-Z0-9_\-\.]+/)*[a-zA-Z0-9_\-\.]+")  # noqa DUO138
-MAX_LENGTH_POEM_AUTHOR = 30
+POEM_AUTHOR_PATTERN = re.compile(r"^[a-zA-Z0-9_\-\. ]+$")  # noqa DUO138
+MAX_LENGTH_POEM_AUTHOR = 50
 
 
 @dataclass(frozen=True)

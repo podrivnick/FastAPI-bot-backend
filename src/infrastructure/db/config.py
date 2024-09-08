@@ -206,7 +206,7 @@ def get_saved_poems() -> List[dict]:
         {
             "_id": "4",
             "poem_title": "The Road Not Taken",
-            "poem_author": "Robert Frost",
+            "poem_author": "George Orwell",
             "poem_text": "Two roads diverged in a yellow wood, and sorry I could not travel both.",
             "poem_date": "01.01.1916",
         },

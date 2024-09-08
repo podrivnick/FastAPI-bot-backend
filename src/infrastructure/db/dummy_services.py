@@ -43,21 +43,22 @@ class ArtMongoDummyService(BaseArtMongoDBService):
             ),
         )
 
-        random_art = (
-            random.SystemRandom.choice(filtered_arts) if filtered_arts else None
-        )
+        random_art = random.choice(filtered_arts) if filtered_arts else None  # noqa DUO102
 
         return convert_art_document_to_entity(random_art) if random_art else None
 
 
 @dataclass
 class FlowerMongoDummyService(BaseFlowerMongoDBService):
-    _saved_flowers: List[dict] = field(default_factory=get_saved_flowers, kw_only=True)
+    _saved_flowers: List[dict] = field(default_factory=list, kw_only=True)
+
+    def __post_init__(self):
+        self._saved_flowers = get_saved_flowers()
 
     async def get_random_flower(
         self,
     ) -> Flower:
-        random_flower = random.SystemRandom.choice(self._saved_flowers)
+        random_flower = random.choice(self._saved_flowers)  # noqa DUO102
 
         return (
             convert_flower_document_to_entity(random_flower) if random_flower else None
@@ -66,7 +67,10 @@ class FlowerMongoDummyService(BaseFlowerMongoDBService):
 
 @dataclass
 class PoemMongoDummyService(BasePoemMongoDBService):
-    _saved_poems: List[dict] = field(default_factory=get_saved_poems, kw_only=True)
+    _saved_poems: List[dict] = field(default_factory=list, kw_only=True)
+
+    def __post_init__(self):
+        self._saved_poems = get_saved_poems()
 
     async def get_random_poem(
         self,
@@ -74,12 +78,12 @@ class PoemMongoDummyService(BasePoemMongoDBService):
     ) -> Poem:
         filtered_poems = list(
             filter(
-                lambda art: art.get("poem_author") == poem_author,
+                lambda poem: poem.get("poem_author") == poem_author,
                 self._saved_poems,
             ),
         )
 
         if filtered_poems:
-            random_poem = random.SystemRandom.choise(filtered_poems)
+            random_poem = random.choice(filtered_poems)  # noqa DUO102
 
         return convert_poem_document_to_entity(random_poem) if random_poem else None

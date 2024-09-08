@@ -22,6 +22,6 @@ class GetRandomPoemCommandHandler(CommandHandler[GetRandomPoemCommand, Poem]):
     ) -> Poem:
         poem_author = poem_vo.PoemAuthor(command.poem_author)
 
-        art = await self.poems_service.get_random_poem(poem_author.to_raw())
+        poem = await self.poems_service.get_random_poem(poem_author.to_raw())
 
-        return art
+        return poem
