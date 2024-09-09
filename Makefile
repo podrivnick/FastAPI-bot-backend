@@ -27,7 +27,7 @@ app-logs:
 
 .PHONY: app-down
 app-down:
-	${DC} -f ${APP_FILE} -f ${STORAGES_FILE} down
+	${DC} -f ${APP_FILE} -f ${STORAGES_FILE} -f ${MONGODB_EXPRESS_FILE} -f ${MONGODB_BACKUP_FILE} -f ${KAFKA_FILE} down
 
 .PHONY: appbash
 appbash:

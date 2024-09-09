@@ -2,8 +2,10 @@ from functools import lru_cache
 from uuid import uuid4
 
 from aiojobs import Scheduler
-from aiokafka import AIOKafkaConsumer
-from aiokafka.producer import AIOKafkaProducer
+from aiokafka import (
+    AIOKafkaConsumer,
+    AIOKafkaProducer,
+)
 from motor.motor_asyncio import AsyncIOMotorClient
 from punq import (
     Container,
@@ -13,7 +15,11 @@ from src.application.arts.commands.arts import (
     GetRandomArtCommand,
     GetRandomArtCommandHandler,
 )
-from src.application.arts.events.arts import GetRandomArtEventHandler
+from src.application.arts.events.arts import (
+    ArtReceivedFromBrokerEvent,
+    ArtReceivedFromBrokerEventHandler,
+    GetRandomArtEventHandler,
+)
 from src.application.flowers.commands.flowers import (
     GetRandomFlowerCommand,
     GetRandomFlowerCommandHandler,
@@ -115,8 +121,8 @@ def _initialize_container() -> Container:
             producer=AIOKafkaProducer(bootstrap_servers=config.kafka_url),
             consumer=AIOKafkaConsumer(
                 bootstrap_servers=config.kafka_url,
-                group_id=f"chats-{uuid4()}",
-                metadata_max_age_ms=30000,
+                group_id=f"galery-{uuid4()}",
+                metadata_max_age_ms=1000000,
             ),
         )
 
@@ -149,14 +155,27 @@ def _initialize_container() -> Container:
 
         # event handlers
         random_art_handler_event = GetRandomArtEventHandler(
-            broker_topic=config.recieved_random_art,
+            broker_topic=config.recieved_random_art_topic,
             message_broker=container.resolve(BaseMessageBroker),
         )
 
+        # event handlers
+        random_art_received_from_broker_event_handler = (
+            ArtReceivedFromBrokerEventHandler(
+                message_broker=container.resolve(BaseMessageBroker),
+                broker_topic=config.recieved_random_art_topic,
+            )
+        )
+
         # events
-        mediator.register_event(
+        mediator.register_events(
             GetRandomArtEvent,
             [random_art_handler_event],
+        )
+        # events
+        mediator.register_events(
+            ArtReceivedFromBrokerEvent,
+            [random_art_received_from_broker_event_handler],
         )
 
         # commands

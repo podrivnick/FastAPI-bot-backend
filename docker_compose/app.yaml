@@ -8,10 +8,14 @@ services:
       - "8000:8000"
     expose:
       - 8000
-    env_file:
-      - ../.env
+    environment:
+      MONGO_DB_CONNECTION_URI: "mongodb://mongodb:27017"
+      KAFKA_URL: "kafka:29092"
+      MONGO_DB_ADMIN_USERNAME: "admin"
+      MONGO_DB_ADMIN_PASSWORD: "admin"
     depends_on:
-      - mongodb
+      kafka:
+        condition: service_healthy
     volumes:
       - ../../FastAPI-bot-backend:/FastAPI-bot-backend
     command: ["python", "-Om", "src"]

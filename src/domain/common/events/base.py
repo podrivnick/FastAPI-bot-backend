@@ -14,9 +14,8 @@ from uuid6 import uuid7
 class BaseEvent(ABC):
     title: ClassVar[str]
 
-    event_id: UUID = field(init=False, kw_only=True, default_factory=uuid7)
+    event_id: UUID = field(kw_only=True, default_factory=uuid7)
     event_timestamp: datetime = field(
-        init=False,
         kw_only=True,
         default_factory=datetime.utcnow,
     )

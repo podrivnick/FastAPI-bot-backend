@@ -1,3 +1,4 @@
+from src.application.arts.events.arts import ArtReceivedFromBrokerEvent
 from src.infrastructure.di.main import init_container
 from src.infrastructure.mediator.main import Mediator
 from src.infrastructure.message_broker.base import BaseMessageBroker
@@ -16,6 +17,18 @@ async def consume_in_background():
     message_broker: BaseMessageBroker = container.resolve(BaseMessageBroker)  # noqa
 
     mediator: Mediator = container.resolve(Mediator)  # noqa
+
+    async for msg in message_broker.start_consuming(config.recieved_random_art_topic):
+        await mediator.publish(
+            [
+                ArtReceivedFromBrokerEvent(
+                    art=msg["art"],
+                    art_name=msg["art_name"],
+                    art_direction=msg["art_direction"],
+                    art_description=msg["art_description"],
+                ),
+            ],
+        )
 
 
 async def close_message_broker():

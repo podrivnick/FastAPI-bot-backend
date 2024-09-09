@@ -63,7 +63,7 @@ class Mediator(EventMediator, CommandMediator):
 
     async def handle_command(self, command: BaseCommands) -> Iterable[CR]:
         event_type = command.__class__
-        handlers = self.event_map.get(event_type)
+        handlers = self.events_map.get(event_type)
 
         if not handlers:
             raise CommandHandlerNotRegisteredException()
