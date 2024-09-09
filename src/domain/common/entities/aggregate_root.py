@@ -1,3 +1,4 @@
+import logging
 from abc import ABC
 from dataclasses import (
     dataclass,
@@ -25,6 +26,12 @@ class AggregateRoot(Entity, ABC):
         kw_only=True,
     )
 
+    def __hash__(self) -> int:
+        return hash(self.oid)
+
+    def __eq__(self, __value: "Entity") -> bool:
+        return self.oid == __value.oid
+
     def record_event(self, event: BaseEvent) -> None:
         self._events.append(event)
 
@@ -36,5 +43,6 @@ class AggregateRoot(Entity, ABC):
 
     def pull_events(self) -> list[BaseEvent]:
         events = self.get_events().copy()
+        logging.info(f"Код дошел до aggregate {self._events}")
         self.clear_events()
         return events

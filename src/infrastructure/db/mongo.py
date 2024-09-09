@@ -1,3 +1,4 @@
+import logging
 from dataclasses import dataclass
 
 from src.domain.arts.entities.art import Art
@@ -29,7 +30,8 @@ class ArtMongoDBService(BaseArtMongoDBService, BaseMongoDBRepository):
         cursor = self._collection.aggregate(pipeline)
 
         random_document = await cursor.to_list(length=1)
-
+        test_art = convert_art_document_to_entity(random_document[0])
+        logging.info(f"Код дошел до test_art {test_art}")
         return (
             convert_art_document_to_entity(random_document[0])
             if random_document

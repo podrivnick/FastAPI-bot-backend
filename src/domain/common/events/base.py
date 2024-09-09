@@ -5,16 +5,14 @@ from dataclasses import (
 )
 from datetime import datetime
 from typing import ClassVar
-from uuid import UUID
-
-from uuid6 import uuid7
+from uuid import uuid4
 
 
 @dataclass
 class BaseEvent(ABC):
     title: ClassVar[str]
 
-    event_id: UUID = field(kw_only=True, default_factory=uuid7)
+    event_id: str = field(kw_only=True, default_factory=lambda: str(uuid4()))
     event_timestamp: datetime = field(
         kw_only=True,
         default_factory=datetime.utcnow,

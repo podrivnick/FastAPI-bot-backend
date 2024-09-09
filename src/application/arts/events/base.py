@@ -10,4 +10,4 @@ ET = TypeVar("ET", bound=BaseEvent)
 
 @dataclass
 class IntegrationEvent(BaseEvent, ABC):
-    raise NotImplementedError()
+    pass

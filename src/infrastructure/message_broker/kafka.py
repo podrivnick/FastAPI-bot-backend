@@ -12,10 +12,8 @@ class KafkaMessageBroker(BaseMessageBroker):
     producer: AIOKafkaProducer
     consumer: AIOKafkaConsumer
 
-    async def send_message(self, key: bytes, topic: str, value: dict):
-        value_bytes = orjson.dumps(value)
-
-        await self.producer.send(topic=topic, key=key, value=value_bytes)
+    async def send_message(self, key: bytes, topic: str, value: bytes):
+        await self.producer.send(topic=topic, key=key, value=value)
 
     async def start_consuming(self, topic: str) -> AsyncIterator[dict]:
         self.consumer.subscribe(topics=[topic])

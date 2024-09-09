@@ -1,4 +1,4 @@
-from src.application.arts.events.arts import ArtReceivedFromBrokerEvent
+from src.domain.arts.events.arts import GetRandomArtEvent
 from src.infrastructure.di.main import init_container
 from src.infrastructure.mediator.main import Mediator
 from src.infrastructure.message_broker.base import BaseMessageBroker
@@ -21,7 +21,7 @@ async def consume_in_background():
     async for msg in message_broker.start_consuming(config.recieved_random_art_topic):
         await mediator.publish(
             [
-                ArtReceivedFromBrokerEvent(
+                GetRandomArtEvent(
                     art=msg["art"],
                     art_name=msg["art_name"],
                     art_direction=msg["art_direction"],

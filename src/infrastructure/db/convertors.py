@@ -12,7 +12,7 @@ from src.domain.poems.entities.poem import Poem
 
 
 def convert_art_document_to_entity(message_document: Mapping[str, Any]) -> Art:
-    return Art(
+    return Art.create_art(
         art=art_vo.Art(message_document["art"]),
         art_name=art_vo.ArtName(message_document["art_name"]),
         art_direction=art_vo.ArtDirection(message_document["art_direction"]),
@@ -21,14 +21,14 @@ def convert_art_document_to_entity(message_document: Mapping[str, Any]) -> Art:
 
 
 def convert_flower_document_to_entity(message_document: Mapping[str, Any]) -> Flower:
-    return Flower(
+    return Flower.create_flower(
         flower_name=flower_vo.FlowerName(message_document["flower_name"]),
         flower_path=flower_vo.FlowerPath(message_document["flower_path"]),
     )
 
 
 def convert_poem_document_to_entity(message_document: Mapping[str, Any]) -> Poem:
-    return Poem(
+    return Poem.create_flower(
         poem_title=poem_vo.PoemTitle(message_document["poem_title"]),
         poem_author=poem_vo.PoemAuthor(message_document["poem_author"]),
         poem_text=poem_vo.PoemText(message_document["poem_text"]),

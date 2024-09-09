@@ -1,3 +1,4 @@
+import logging
 from contextlib import asynccontextmanager
 
 import uvicorn
@@ -48,6 +49,11 @@ def init_api(
         lifespan=lifespan,
     )
     setup_middleware(app)
+
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format="%(asctime)s - %(levelname)s - %(message)s",
+    )
 
     app.add_middleware(
         CORSMiddleware,

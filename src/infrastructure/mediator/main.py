@@ -57,6 +57,7 @@ class Mediator(EventMediator, CommandMediator):
             handlers: Iterable[EventHandler] = self.events_map[event.__class__]
             if not handlers:
                 raise EventHandlerNotRegisteredException()
+
             results.extend([await handler.handle(event) for handler in handlers])
 
         return results
