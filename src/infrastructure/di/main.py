@@ -15,20 +15,20 @@ from src.application.arts.commands.arts import (
     GetRandomArtCommand,
     GetRandomArtCommandHandler,
 )
-from src.application.arts.events.arts import (
-    ArtReceivedFromBrokerEvent,
-    ArtReceivedFromBrokerEventHandler,
-    GetRandomArtEventHandler,
-)
+from src.application.arts.events.arts import GetRandomArtEventHandler
 from src.application.flowers.commands.flowers import (
     GetRandomFlowerCommand,
     GetRandomFlowerCommandHandler,
 )
+from src.application.flowers.events.flowers import GetRandomFlowerEventHandler
 from src.application.poems.commands.poems import (
     GetRandomPoemCommand,
     GetRandomPoemCommandHandler,
 )
+from src.application.poems.events.poems import GetRandomPoemEventHandler
 from src.domain.arts.events.arts import GetRandomArtEvent
+from src.domain.flowers.events.flowers import GetRandomFlowerEvent
+from src.domain.poems.events.poems import GetRandomPoemEvent
 from src.infrastructure.db.mongo import (
     ArtMongoDBService,
     FlowerMongoDBService,
@@ -160,11 +160,15 @@ def _initialize_container() -> Container:
         )
 
         # event handlers
-        random_art_received_from_broker_event_handler = (
-            ArtReceivedFromBrokerEventHandler(
-                message_broker=container.resolve(BaseMessageBroker),
-                broker_topic=config.recieved_random_art_topic,
-            )
+        random_flower_handler_event = GetRandomFlowerEventHandler(
+            broker_topic=config.recieved_random_flower_topic,
+            message_broker=container.resolve(BaseMessageBroker),
+        )
+
+        # event handlers
+        random_poem_handler_event = GetRandomPoemEventHandler(
+            broker_topic=config.recieved_random_poem_topic,
+            message_broker=container.resolve(BaseMessageBroker),
         )
 
         # events
@@ -172,10 +176,17 @@ def _initialize_container() -> Container:
             GetRandomArtEvent,
             [random_art_handler_event],
         )
+
         # events
         mediator.register_events(
-            ArtReceivedFromBrokerEvent,
-            [random_art_received_from_broker_event_handler],
+            GetRandomPoemEvent,
+            [random_poem_handler_event],
+        )
+
+        # events
+        mediator.register_events(
+            GetRandomFlowerEvent,
+            [random_flower_handler_event],
         )
 
         # commands

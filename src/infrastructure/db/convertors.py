@@ -28,7 +28,7 @@ def convert_flower_document_to_entity(message_document: Mapping[str, Any]) -> Fl
 
 
 def convert_poem_document_to_entity(message_document: Mapping[str, Any]) -> Poem:
-    return Poem.create_flower(
+    return Poem.create_poem(
         poem_title=poem_vo.PoemTitle(message_document["poem_title"]),
         poem_author=poem_vo.PoemAuthor(message_document["poem_author"]),
         poem_text=poem_vo.PoemText(message_document["poem_text"]),

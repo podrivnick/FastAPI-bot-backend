@@ -30,5 +30,7 @@ class Config(BaseSettings):
         alias="KAFKA_URL",
     )
     recieved_random_art_topic: str = Field(default="recieved_random_art")
+    recieved_random_flower_topic: str = Field(default="recieved_random_flower")
+    recieved_random_poem_topic: str = Field(default="recieved_random_poem")
 
     debug: bool = Field(default=True, alias="DEBUG")
