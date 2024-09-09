@@ -5,12 +5,18 @@ from src.infrastructure.db.services import (
     BaseFlowerMongoDBService,
     BasePoemMongoDBService,
 )
+from src.infrastructure.mediator.main import Mediator
 from src.tests.unit.fixtures import init_dummy_container
 
 
 @fixture(scope="function")
 def container() -> Container:
     return init_dummy_container()
+
+
+@fixture()
+def mediator(container: Container) -> Mediator:
+    return container.resolve(Mediator)
 
 
 @fixture()

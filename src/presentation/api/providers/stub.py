@@ -15,8 +15,8 @@ class Stub:
 
     def __call__(self) -> Any:
         if callable(self._dependency):
-            return self._dependency()  # Вызываем dependency, если это функция
-        return self._dependency  # Или просто возвращаем объект
+            return self._dependency()
+        return self._dependency
 
     def __eq__(self, other: object) -> bool:
         if isinstance(other, Stub):
