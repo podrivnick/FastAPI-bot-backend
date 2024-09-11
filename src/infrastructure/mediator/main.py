@@ -48,7 +48,7 @@ class Mediator(EventMediator, CommandMediator):
         command: CT,
         command_handlers: Iterable[CommandHandler[CT, CR]],
     ) -> None:
-        self.events_map[command].extend(command_handlers)
+        self.commands_map[command].extend(command_handlers)
 
     async def publish_event(self, events: Iterable[BaseEvent]) -> Iterable[ER]:
         results = []
@@ -64,7 +64,7 @@ class Mediator(EventMediator, CommandMediator):
 
     async def handle_command(self, command: BaseCommands) -> Iterable[CR]:
         event_type = command.__class__
-        handlers = self.events_map.get(event_type)
+        handlers = self.commands_map.get(event_type)
 
         if not handlers:
             raise CommandHandlerNotRegisteredException()
