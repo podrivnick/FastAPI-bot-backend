@@ -13,9 +13,6 @@ services:
       KAFKA_URL: "kafka:29092"
       MONGO_DB_ADMIN_USERNAME: "admin"
       MONGO_DB_ADMIN_PASSWORD: "admin"
-    depends_on:
-      kafka:
-        condition: service_healthy
     volumes:
       - ../../FastAPI-bot-backend:/FastAPI-bot-backend
     command: ["python", "-Om", "src"]

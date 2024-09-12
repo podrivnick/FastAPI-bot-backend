@@ -46,7 +46,6 @@ def init_api(
         title="User service",
         version="1.0.0",
         default_response_class=ORJSONResponse,
-        lifespan=lifespan,
     )
     setup_middleware(app)
 

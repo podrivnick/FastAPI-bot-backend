@@ -24,6 +24,4 @@ class GetRandomPoemCommandHandler(CommandHandler[GetRandomPoemCommand, Poem]):
 
         poem = await self.poems_service.get_random_poem(poem_author.to_raw())
 
-        await self._mediator.publish_event(poem.pull_events())
-
         return poem

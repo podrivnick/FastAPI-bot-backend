@@ -24,6 +24,4 @@ class GetRandomFlowerCommandHandler(CommandHandler[GetRandomFlowerCommand, Flowe
     ) -> Flower:
         flower = await self.flowers_service.get_random_flower()
 
-        await self._mediator.publish_event(flower.pull_events())
-
         return flower

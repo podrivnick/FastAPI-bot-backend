@@ -30,17 +30,15 @@ jobs:
           docker-compose -f docker_compose/app.yaml \
                          -f docker_compose/mongodb.yaml \
                          -f docker_compose/mongodb_backup.yaml \
-                         -f docker_compose/kafka.yaml \
                          --env-file .env.example up -d
 
     - name: Run Tests
       run: |
-          docker-compose -f docker_compose/app.yaml -f docker_compose/kafka.yaml exec app pytest
+          docker-compose -f docker_compose/app.yaml exec app pytest
 
     - name: Stop services
       run: |
           docker-compose -f docker_compose/app.yaml \
                          -f docker_compose/mongodb.yaml \
                          -f docker_compose/mongodb_backup.yaml \
-                         -f docker_compose/kafka.yaml \
                          down

@@ -10,12 +10,11 @@ ENV_FILE = --env-file .env
 APP_CONTAINER = app
 DB_CONTAINER = ppostgres
 INTO_BASH = /bin/bash
-ENTER_POSTGRES_CONTAINER = psql -U postgres -d auth
 
 
 .PHONY: app
 app:
-	${DC} -f ${APP_FILE} -f ${STORAGES_FILE} -f ${MONGODB_EXPRESS_FILE} -f ${MONGODB_BACKUP_FILE} -f ${KAFKA_FILE} ${ENV_FILE} up -d
+	${DC} -f ${APP_FILE} -f ${STORAGES_FILE} -f ${MONGODB_EXPRESS_FILE} -f ${MONGODB_BACKUP_FILE} ${ENV_FILE} up -d
 
 .PHONY: mongo_backup
 mongo_backup:
@@ -27,15 +26,11 @@ app-logs:
 
 .PHONY: app-down
 app-down:
-	${DC} -f ${APP_FILE} -f ${STORAGES_FILE} -f ${MONGODB_EXPRESS_FILE} -f ${MONGODB_BACKUP_FILE} -f ${KAFKA_FILE} down
+	${DC} -f ${APP_FILE} -f ${STORAGES_FILE} -f ${MONGODB_EXPRESS_FILE} -f ${MONGODB_BACKUP_FILE} down
 
 .PHONY: appbash
 appbash:
 	${EXEC} ${APP_CONTAINER} ${INTO_BASH}
-
-.PHONY: dbbash
-dbbash:
-	${EXEC} ${DB_CONTAINER} ${ENTER_POSTGRES_CONTAINER}
 
 .PHONY: runtest
 runtest:
