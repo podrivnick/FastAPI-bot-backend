@@ -1,12 +1,12 @@
-name: UserServiceTest
+name: APIGaleryTest
 
 on:
   workflow_call:
 
   pull_request:
-    branches: [ ci/cd ]
+    branches: [ master, ci/cd ]
   push:
-    branches: [ ci/cd ]
+    branches: [ master, ci/cd ]
 
 jobs:
   build:
