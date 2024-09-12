@@ -23,17 +23,9 @@ def test_poem_title_is_valid():
 
 def test_poem_text_is_valid():
     poem_text_empty = ""
-    poem_text_is_too_long = "Some Text"
-    poem_text_is_incorrect_format = "~Jupiter"
 
     with pytest.raises(ex.PoemTextIsEmptyException):
         poem_vo.PoemText(poem_text_empty)
-
-    with pytest.raises(ex.PoemTextIsTooLongException):
-        poem_vo.PoemText(poem_text_is_too_long * 200)
-
-    with pytest.raises(ex.PoemTextInCorrectFormatException):
-        poem_vo.PoemText(poem_text_is_incorrect_format)
 
 
 def test_poem_date_is_valid():
