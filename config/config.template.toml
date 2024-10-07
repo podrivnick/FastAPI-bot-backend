@@ -7,4 +7,4 @@ password = "1234"
 echo = true
 
 [API]
-DEBUG = true
+DEBUG = false

@@ -2,7 +2,6 @@ services:
   mongodb-backup:
     container_name: mongodb-backup
     image: mongo:6-jammy
-    restart: always
     volumes:
       - db_backup:/backup
     environment:
@@ -13,6 +12,7 @@ services:
       - mongodb
     networks:
       - backend
+    restart: unless-stopped
 
 volumes:
   db_backup:

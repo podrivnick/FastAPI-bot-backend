@@ -22,5 +22,5 @@ class FlowerName(ValueObject[str | None]):
         if len(self.value) > MAX_LENGTH_FLOWERS_NAME:
             raise ex.FlowerNameIsTooLongException()
 
-        if not FLOWER_NAME_PATTERN.match(self.value):
-            raise ex.FlowerNameInCorrectFormatException()
+        # if not FLOWER_NAME_PATTERN.match(self.value):
+        #     raise ex.FlowerNameInCorrectFormatException()

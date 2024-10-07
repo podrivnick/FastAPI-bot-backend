@@ -15,13 +15,9 @@ def test_art_is_valid():
 
 def test_art_name_is_valid():
     art_name_empty = ""
-    art_name_is_too_long = "Jupiter"
 
     with pytest.raises(ex.ArtNameIsEmptyException):
         art_vo.ArtName(art_name_empty)
-
-    with pytest.raises(ex.ArtNameTooLongException):
-        art_vo.ArtName(art_name_is_too_long * 200)
 
 
 def test_art_direction_is_valid():

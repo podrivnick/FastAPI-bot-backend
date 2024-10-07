@@ -6,6 +6,7 @@ services:
     container_name: app
     ports:
       - "8000:8000"
+    restart: unless-stopped
     expose:
       - 8000
     environment:

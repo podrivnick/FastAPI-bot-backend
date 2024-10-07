@@ -9,6 +9,7 @@ services:
       - ../data:/import
     networks:
       - backend
+    restart: unless-stopped
 
 volumes:
   dbdata6:
